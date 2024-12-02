@@ -17,11 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         boundingBox.appendChild(newCircle);
 
-        const boundingBoxRect = boundingBox.getBoundingClientRect();
-        const boxWidth = boundingBoxRect.width;
-        const boxHeight = boundingBoxRect.height;
-
-
         const randomX = Math.random() * (90 - 5) + 5;
         const randomY = Math.random() * (90 - 5) + 5;            
 
@@ -30,16 +25,20 @@ document.addEventListener('DOMContentLoaded', function() {
         newCircle.style.display = 'block'
 
         newCircle.addEventListener('click', function() {
-            hits = hits + 1
+            hits = hits + 1;
             newCircle.remove()
         })
+
+        setTimeout(function() {
+            newCircle.remove()
+        }, 5000)
 
         return true
     }
 
 
     async function start() {
-        for (let i = 1; i > 0; i--) {
+        for (let i = 5; i > 0; i--) {
             mainText.innerText = i.toString();
             await sleep(1000)
         }
@@ -48,18 +47,22 @@ document.addEventListener('DOMContentLoaded', function() {
         mainText.style.display = 'none';
         counter.style.display = 'block';
 
+        document.addEventListener('click', function() {
+            total = total + 1
+            counter.innerText = `Count: ${hits}/${total}`
+
+        })
 
         while (true) {
             handleCircle()
-            total = total + 1;
-            counter.innerText = `Count ${hits}/${total}`
             await sleep(1000)
         }
+
     }
 
     const textListener = function() {
         start();
-        mainText.removeEventListener('click', textListener);
+        document.removeEventListener('click', textListener);
     };
 
     const boxListener = function() {
@@ -67,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
         boundingBox.removeEventListener('click', boxListener);
     };
 
-    mainText.addEventListener('click', textListener);
-    boundingBox.addEventListener('click', boxListener);
+    document.addEventListener('click', textListener);
 
 });
